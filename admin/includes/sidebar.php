@@ -27,7 +27,7 @@
                     <i class="fas fa-shopping-cart"></i>
                     <span>Orders</span>
                     <?php
-                    $pendingCount = $stats['pending_orders'] ?? 0;
+                    $pendingCount = getPendingOrdersCount();
                     if ($pendingCount > 0):
                     ?>
                     <span class="nav-badge"><?php echo $pendingCount; ?></span>
@@ -40,7 +40,7 @@
                     <i class="fas fa-star"></i>
                     <span>Reviews</span>
                     <?php
-                    $pendingReviews = $stats['pending_reviews'] ?? 0;
+                    $pendingReviews = getPendingReviewsCount();
                     if ($pendingReviews > 0):
                     ?>
                     <span class="nav-badge"><?php echo $pendingReviews; ?></span>

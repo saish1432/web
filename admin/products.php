@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Get all products
-$products = getAllProducts();
+$products = array_unique(getAllProducts(), SORT_REGULAR);
 ?>
 <!DOCTYPE html>
 <html lang="en">

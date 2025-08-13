@@ -149,6 +149,7 @@ $recentReviews = array_slice($recentReviews, 0, 5);
                                         <th>Customer</th>
                                         <th>Amount</th>
                                         <th>Status</th>
+                                        <th>Date</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -162,6 +163,7 @@ $recentReviews = array_slice($recentReviews, 0, 5);
                                                 <?php echo ucfirst($order['status']); ?>
                                             </span>
                                         </td>
+                                        <td><?php echo date('M j, H:i', strtotime($order['created_at'])); ?></td>
                                     </tr>
                                     <?php endforeach; ?>
                                 </tbody>

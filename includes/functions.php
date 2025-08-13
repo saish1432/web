@@ -205,7 +205,7 @@ function getProducts($status = 'active') {
 function getAllProducts() {
     global $pdo;
     try {
-        $stmt = $pdo->query("SELECT * FROM products ORDER BY sort_order ASC, created_at DESC");
+        $stmt = $pdo->query("SELECT DISTINCT * FROM products GROUP BY title, price ORDER BY sort_order ASC, created_at DESC");
         return $stmt->fetchAll();
     } catch (PDOException $e) {
         return [];
@@ -789,7 +789,15 @@ function changeAdminPassword($adminId, $currentPassword, $newPassword) {
         $stmt->execute([$adminId]);
         $admin = $stmt->fetch();
         
-        if (!$admin || (!password_verify($currentPassword, $admin['password_hash']) && $currentPassword !== 'admin123')) {
+        if (!$admin) {
+            return false;
+        }
+        
+        // Check current password (allow admin123 as fallback)
+        $passwordValid = password_verify($currentPassword, $admin['password_hash']) || 
+                        ($currentPassword === 'admin123' && $admin['password_hash'] === '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi');
+        
+        if (!$passwordValid) {
             return false;
         }
         
@@ -849,4 +857,41 @@ function createMissingTables() {
 
 // Initialize missing tables on first load
 createMissingTables();
+
+// Get pending orders count for notifications
+function getPendingOrdersCount() {
+    global $pdo;
+    try {
+        $stmt = $pdo->query("SELECT COUNT(*) as count FROM orders WHERE status = 'pending'");
+        $result = $stmt->fetch();
+        return $result['count'] ?? 0;
+    } catch (PDOException $e) {
+        return 0;
+    }
+}
+
+// Get pending reviews count for notifications
+function getPendingReviewsCount() {
+    global $pdo;
+    try {
+        $stmt = $pdo->query("SELECT COUNT(*) as count FROM reviews WHERE status = 'pending'");
+        $result = $stmt->fetch();
+        return $result['count'] ?? 0;
+    } catch (PDOException $e) {
+        return 0;
+    }
+}
+
+// Get admin profile image
+function getAdminProfileImage($adminId) {
+    global $pdo;
+    try {
+        $stmt = $pdo->prepare("SELECT profile_image_url FROM admins WHERE id = ?");
+        $stmt->execute([$adminId]);
+        $result = $stmt->fetch();
+        return $result['profile_image_url'] ?? null;
+    } catch (PDOException $e) {
+        return null;
+    }
+}
 ?>

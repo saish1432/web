@@ -15,25 +15,38 @@
             <div class="dropdown">
                 <button class="header-btn dropdown-toggle" onclick="toggleDropdown('notifications')">
                     <i class="fas fa-bell"></i>
-                    <span class="notification-badge">3</span>
+                    <?php 
+                    $pendingOrders = getPendingOrdersCount();
+                    $pendingReviews = getPendingReviewsCount();
+                    $totalNotifications = $pendingOrders + $pendingReviews;
+                    if ($totalNotifications > 0): 
+                    ?>
+                    <span class="notification-badge"><?php echo $totalNotifications; ?></span>
+                    <?php endif; ?>
                 </button>
                 <div class="dropdown-menu" id="notifications">
                     <div class="dropdown-header">Notifications</div>
-                    <a href="#" class="dropdown-item">
+                    <?php if ($pendingOrders > 0): ?>
+                    <a href="orders.php" class="dropdown-item">
                         <i class="fas fa-shopping-cart"></i>
-                        New order received
-                        <small>2 minutes ago</small>
+                        <?php echo $pendingOrders; ?> pending order(s)
+                        <small>Needs attention</small>
                     </a>
-                    <a href="#" class="dropdown-item">
+                    <?php endif; ?>
+                    <?php if ($pendingReviews > 0): ?>
+                    <a href="reviews.php" class="dropdown-item">
                         <i class="fas fa-star"></i>
-                        New review pending
-                        <small>1 hour ago</small>
+                        <?php echo $pendingReviews; ?> review(s) pending
+                        <small>Awaiting approval</small>
                     </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-user"></i>
-                        New user registered
-                        <small>3 hours ago</small>
-                    </a>
+                    <?php endif; ?>
+                    <?php if ($totalNotifications === 0): ?>
+                    <div class="dropdown-item" style="opacity: 0.6;">
+                        <i class="fas fa-check"></i>
+                        No new notifications
+                        <small>All caught up!</small>
+                    </div>
+                    <?php endif; ?>
                 </div>
             </div>
             

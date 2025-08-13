@@ -535,8 +535,11 @@ $currentDomain = getCurrentDomain();
             <!-- Logo -->
             <div class="logo-container">
                 <div class="logo">
-                    <?php if (!empty($settings['director_image_url'])): ?>
-                        <img src="<?php echo htmlspecialchars($settings['director_image_url']); ?>" alt="Director Photo">
+                    <?php 
+                    $adminProfileImage = getAdminProfileImage(1); // Get admin profile image
+                    if (!empty($adminProfileImage)): 
+                    ?>
+                        <img src="<?php echo htmlspecialchars($adminProfileImage); ?>" alt="Director Photo">
                     <?php else: ?>
                         <div class="logo-placeholder">🏢</div>
                     <?php endif; ?>

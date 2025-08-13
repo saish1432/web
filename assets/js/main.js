@@ -644,6 +644,7 @@ function setUserSession(user) {
     sessionStorage.setItem('user_name', user.name);
     sessionStorage.setItem('user_email', user.email);
     sessionStorage.setItem('user_phone', user.phone || '');
+    sessionStorage.setItem('user_created_at', user.created_at || new Date().toISOString());
 }
 
 function clearUserSession() {
@@ -651,6 +652,7 @@ function clearUserSession() {
     sessionStorage.removeItem('user_name');
     sessionStorage.removeItem('user_email');
     sessionStorage.removeItem('user_phone');
+    sessionStorage.removeItem('user_created_at');
 }
 
 // User Authentication Functions
